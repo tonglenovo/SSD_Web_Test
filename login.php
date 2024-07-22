@@ -50,36 +50,20 @@
 <body>
     <div class="container">
         <h2>Login</h2>
-        <div class="form-group">
-            <label for="username">Username</label>
-            <input type="text" id="username" />
-        </div>
-        <div class="form-group">
-            <label for="password">Password</label>
-            <input type="password" id="password" />
-        </div>
-        <div class="form-group">
-            <button onclick="login()">Login</button>
-        </div>
-        <p id="error" style="color: red; display: none;">Invalid username or password</p>
+        <form action="authenticate.php" method="post">
+            <div class="form-group">
+                <label for="username">Username</label>
+                <input type="text" id="username" name="username" required />
+            </div>
+            <div class="form-group">
+                <label for="password">Password</label>
+                <input type="password" id="password" name="password" required />
+            </div>
+            <div class="form-group">
+                <button type="submit">Login</button>
+            </div>
+            <p id="error" style="color: red; display: none;">Invalid username or password</p>
+        </form>
     </div>
-
-    <script>
-        function login() {
-            var username = document.getElementById('username').value;
-            var password = document.getElementById('password').value;
-            var errorElement = document.getElementById('error');
-
-            // Preset username and password
-            var correctUsername = 'user';
-            var correctPassword = 'password';
-
-            if (username === correctUsername && password === correctPassword) {
-                window.location.href = 'home.html';
-            } else {
-                errorElement.style.display = 'block';
-            }
-        }
-    </script>
 </body>
 </html>
