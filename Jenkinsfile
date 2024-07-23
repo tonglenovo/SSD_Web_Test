@@ -55,18 +55,18 @@ pipeline {
 	}
 
 	stages {
-		stage('Checkout SCM') {
-        	steps {
-            	git 'https://github.com/tonglenovo/JenkinsDependencyCheckTest.git' 
-        	}
-    	}
-
 		stage('Test') {
 			steps {
 				sh 'composer install'
                 sh './vendor/bin/phpunit tests'
             }
 		}
+
+		stage('Checkout SCM') {
+        	steps {
+            	git 'https://github.com/tonglenovo/JenkinsDependencyCheckTest.git' 
+        	}
+    	}
 
   	}
 }
