@@ -49,34 +49,28 @@
 
 
 pipeline {
-    agent {
-        docker {
-            image 'maven:3.8.5-openjdk-11'
-        }
-    }
-    stages {
-        stage('Setup') {
-            steps {
-                sh 'sudo apt-get update && sudo apt-get install -y composer'
-            }
-        }
-        stage('Test') {
-            steps {
-                sh 'composer install'
+	agent{
+		docker {
+			image 'composer:latest'
+		}
+	}
+	stages {
+		stage('Test') {
+			steps {
+				sh 'composer install'
                 sh './vendor/bin/phpunit tests'
             }
-        }
-        stage('OWASP Dependency-Check Vulnerabilities') {
-            steps {
-                dependencyCheck additionalArguments: '''
-                    -o './'
-                    -s './'
-                    -f 'ALL'
-                    --prettyPrint''', odcInstallation: 'OWASP Dependency-Check Vulnerabilities'
-                dependencyCheckPublisher pattern: 'dependency-check-report.xml'
-            }
-        }
-    }
+		}
+
+		stage('OWASP Dependency-Check Vulnerabilities') {
+  			steps {
+    			dependencyCheck additionalArguments: '''
+                	-o './'
+                	-s './'
+                	-f 'ALL'
+                	--prettyPrint''', odcInstallation: 'OWASP Dependency-Check Vulnerabilities'
+				dependencyCheckPublisher pattern: 'dependency-check-report.xml'
+  			}
+		}
+	}
 }
-
-
