@@ -47,37 +47,60 @@
 //     }
 // }
 
+// pipeline {
+// 	agent{
+// 		docker {
+// 			image 'composer:latest'
+// 		}
+// 	}
+
+// 	stages {
+// 		stage('Test') {
+// 			steps {
+// 				sh 'composer install'
+//                 sh './vendor/bin/phpunit tests'
+//             }
+// 		}
+
+// 		stage('Checkout SCM') {
+//         	steps {
+//             	git 'https://github.com/tonglenovo/SSD_Web_Test.git' 
+//         	}
+//     	}
+// 		stage('OWASP Dependency-Check Vulnerabilities') {
+//   			steps {
+//     			dependencyCheck additionalArguments: '''
+//                 	-o './'
+//                 	-s './'
+//                 	-f 'ALL'
+//                 	--prettyPrint''', odcInstallation: 'OWASP Dependency-Check Vulnerabilities'
+   	 
+//     			dependencyCheckPublisher pattern: 'dependency-check-report.xml'
+//   			}
+// 		}
+
+//   	}
+// }
+
 pipeline {
-	agent{
-		docker {
-			image 'composer:latest'
-		}
-	}
-
+	agent any
 	stages {
-		stage('Test') {
-			steps {
-				sh 'composer install'
-                sh './vendor/bin/phpunit tests'
-            }
-		}
-
-		stage('Checkout SCM') {
+    	stage('Checkout SCM') {
         	steps {
             	git 'https://github.com/tonglenovo/SSD_Web_Test.git' 
         	}
     	}
-		stage('OWASP Dependency-Check Vulnerabilities') {
-  			steps {
-    			dependencyCheck additionalArguments: '''
+
+    	stage('OWASP Dependency-Check Vulnerabilities') {
+  	steps {
+    	dependencyCheck additionalArguments: '''
                 	-o './'
                 	-s './'
                 	-f 'ALL'
                 	--prettyPrint''', odcInstallation: 'OWASP Dependency-Check Vulnerabilities'
    	 
-    			dependencyCheckPublisher pattern: 'dependency-check-report.xml'
-  			}
-		}
-
+    	dependencyCheckPublisher pattern: 'dependency-check-report.xml'
   	}
+	}
+  }
 }
