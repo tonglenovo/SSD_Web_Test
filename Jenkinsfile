@@ -57,7 +57,7 @@ pipeline {
     stages {
         stage('Setup') {
             steps {
-                sh 'apt-get update && apt-get install -y composer'
+                sh 'sudo apt-get update && sudo apt-get install -y composer'
             }
         }
         stage('Test') {
@@ -78,4 +78,5 @@ pipeline {
         }
     }
 }
+
 
