@@ -64,7 +64,7 @@ pipeline {
 
 		stage('Checkout SCM') {
         	steps {
-            	git 'https://github.com/tonglenovo/JenkinsDependencyCheckTest.git' 
+            	git 'https://github.com/tonglenovo/SSD_Web_Test.git' 
         	}
     	}
 		stage('OWASP Dependency-Check Vulnerabilities') {
