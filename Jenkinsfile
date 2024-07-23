@@ -54,16 +54,7 @@ pipeline {
             image 'maven:3.8.5-openjdk-11'
         }
     }
-    environment {
-        JAVA_HOME = '/usr/local/openjdk-11'
-    }
     stages {
-        stage('Setup') {
-            steps {
-                sh 'apt-get update && apt-get install -y curl unzip'
-                sh 'curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin --filename=composer'
-            }
-        }
         stage('Test') {
             steps {
                 sh 'composer install'
