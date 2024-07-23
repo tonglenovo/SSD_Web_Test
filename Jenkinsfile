@@ -47,7 +47,6 @@
 //     }
 // }
 
-
 pipeline {
 	agent{
 		docker {
@@ -55,16 +54,28 @@ pipeline {
 		}
 	}
 	stages {
+    	stage('Checkout SCM') {
+        	steps {
+            	git 'https://github.com/tonglenovo/JenkinsDependencyCheckTest.git' 
+        	}
+    	}
 		stage('Test') {
 			steps {
 				sh 'composer install'
                 sh './vendor/bin/phpunit tests'
             }
 		}
-		stage('OWASP') {
-			steps {
-				dependencyCheck additionalArguments: '--format HTML --format XML', odcInstallation: 'OWASP Dependency-Check Vulnerabilities'
+
+    	stage('OWASP Dependency-Check Vulnerabilities') {
+  			steps {
+    			dependencyCheck additionalArguments: '''
+                	-o './'
+                	-s './'
+                	-f 'ALL'
+                	--prettyPrint''', odcInstallation: 'OWASP Dependency-Check Vulnerabilities'
+   	 
+    			dependencyCheckPublisher pattern: 'dependency-check-report.xml'
 			}
 		}
-	}
+  }
 }
