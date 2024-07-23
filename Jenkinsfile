@@ -85,7 +85,7 @@
 pipeline {
     agent any
     stages {
-        stage('Composer Install') {
+        stage('PHP Unit Test') {
             agent {
                 docker {
                     image 'composer:latest'
@@ -99,15 +99,11 @@ pipeline {
             }
         }	
 
-		stage('Checkout SCM') {
+		stage('OWASP Dependency-Check Vulnerabilities') {
             steps {
                 git 'https://github.com/tonglenovo/SSD_Web_Test.git'
-            }
-        }
-        
-        stage('OWASP Dependency-Check Vulnerabilities') {
-            steps {
-                dependencyCheck additionalArguments: '''
+
+				dependencyCheck additionalArguments: '''
                     -o './'
                     -s './'
                     -f 'ALL'
