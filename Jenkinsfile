@@ -49,28 +49,36 @@
 
 
 pipeline {
-	agent{
-		docker {
-			image 'composer:latest'
-		}
-	}
-	stages {
-		stage('Test') {
-			steps {
-				sh 'composer install'
+    agent {
+        docker {
+            image 'maven:3.8.5-openjdk-11'
+        }
+    }
+    environment {
+        JAVA_HOME = '/usr/local/openjdk-11'
+    }
+    stages {
+        stage('Setup') {
+            steps {
+                sh 'apt-get update && apt-get install -y curl unzip'
+                sh 'curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin --filename=composer'
+            }
+        }
+        stage('Test') {
+            steps {
+                sh 'composer install'
                 sh './vendor/bin/phpunit tests'
             }
-		}
-
-		stage('OWASP Dependency-Check Vulnerabilities') {
-  			steps {
-    			dependencyCheck additionalArguments: '''
-                	-o './'
-                	-s './'
-                	-f 'ALL'
-                	--prettyPrint''', odcInstallation: 'OWASP Dependency-Check Vulnerabilities'
-				dependencyCheckPublisher pattern: 'dependency-check-report.xml'
-  			}
-		}
-	}
+        }
+        stage('OWASP Dependency-Check Vulnerabilities') {
+            steps {
+                dependencyCheck additionalArguments: '''
+                    -o './'
+                    -s './'
+                    -f 'ALL'
+                    --prettyPrint''', odcInstallation: 'OWASP Dependency-Check Vulnerabilities'
+                dependencyCheckPublisher pattern: 'dependency-check-report.xml'
+            }
+        }
+    }
 }
