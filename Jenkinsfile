@@ -85,12 +85,6 @@
 pipeline {
     agent any
     stages {
-        stage('Checkout SCM') {
-            steps {
-                git 'https://github.com/tonglenovo/SSD_Web_Test.git'
-            }
-        }
-        
         stage('Composer Install') {
             agent {
                 docker {
@@ -99,6 +93,22 @@ pipeline {
             }
             steps {
                 sh 'composer install'
+            }
+        }
+
+		stage('Test') {
+			steps {
+                // Install dependencies
+        		sh 'composer install'
+        
+				// Run PHPUnit tests
+				sh './vendor/bin/phpunit tests'
+            }
+		}
+
+		stage('Checkout SCM') {
+            steps {
+                git 'https://github.com/tonglenovo/SSD_Web_Test.git'
             }
         }
         
