@@ -17,11 +17,17 @@ class LoginTest extends TestCase
     {
         $result = $this->login->authenticate('user', 'password');
         $this->assertEquals('Login successful', $result);
+        if ($result === 'Login successful') {
+            echo "The test has passed for testSuccessfulLogin." . PHP_EOL;
+        }
     }
 
     public function testFailedLogin()
     {
         $result = $this->login->authenticate('user', 'wrongpassword');
         $this->assertEquals('Invalid username or password', $result);
+        if ($result === 'Invalid username or password') {
+            echo "The test has passed for testFailedLogin." . PHP_EOL;
+        }
     }
 }
