@@ -83,12 +83,15 @@
 // }
 
 pipeline {
-	agent {
-        docker {
-            image 'composer:latest'
-        }
-    }
+	agent any
 	stages {
+		stage('Composer Install') {
+			agent {
+                docker {
+                    image 'composer:latest'
+                }
+            }
+		}
     	stage('Checkout SCM') {
         	steps {
             	git 'https://github.com/tonglenovo/SSD_Web_Test.git' 
@@ -96,15 +99,15 @@ pipeline {
     	}
 
     	stage('OWASP Dependency-Check Vulnerabilities') {
-  	steps {
-    	dependencyCheck additionalArguments: '''
+  			steps {
+    			dependencyCheck additionalArguments: '''
                 	-o './'
                 	-s './'
                 	-f 'ALL'
                 	--prettyPrint''', odcInstallation: 'OWASP Dependency-Check Vulnerabilities'
    	 
-    	dependencyCheckPublisher pattern: 'dependency-check-report.xml'
-  	}
+    			dependencyCheckPublisher pattern: 'dependency-check-report.xml'
+  			}
+		}
 	}
-  }
 }
