@@ -51,18 +51,13 @@
 pipeline {
     agent {
         docker {
-            image 'composer:latest'
-            args '-u root'
+            image 'maven:3.8.5-openjdk-11'
         }
     }
     stages {
         stage('Setup') {
             steps {
-                sh '''
-                    apt-get update
-                    apt-get install -y openjdk-11-jdk
-                    export JAVA_HOME=/usr/lib/jvm/java-11-openjdk-amd64
-                '''
+                sh 'apt-get update && apt-get install -y composer'
             }
         }
         stage('Test') {
@@ -83,3 +78,4 @@ pipeline {
         }
     }
 }
+
