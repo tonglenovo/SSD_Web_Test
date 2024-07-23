@@ -92,19 +92,12 @@ pipeline {
                 }
             }
             steps {
+				 // Install dependencies
                 sh 'composer install'
-            }
-        }
-
-		stage('Test') {
-			steps {
-                // Install dependencies
-        		sh 'composer install'
-        
 				// Run PHPUnit tests
 				sh './vendor/bin/phpunit tests'
             }
-		}
+        }	
 
 		stage('Checkout SCM') {
             steps {
